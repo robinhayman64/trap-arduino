@@ -1,7 +1,7 @@
 #include <SoftwareSerial.h>
 SoftwareSerial GSM(2, 3); // RX, TX
 
-boolean debug = true;    // Enable serial communication after startup
+boolean debug = false;    // Enable serial communication after startup
 char* deviceImei;         // International Mobile Equipment Identity (IMEI)
 long int standby = 10800000;   // Time for GSM to turn off in milliseconds (10800000 = 3 hours)
 
