@@ -1,14 +1,16 @@
 #include <SoftwareSerial.h>
 SoftwareSerial GSM(2, 3); // RX, TX
 
-boolean debug = false;    // Enable serial communication after startup
-char* deviceImei;         // International Mobile Equipment Identity (IMEI)
-long int standby = 10800000;   // Time for GSM to turn off in milliseconds (10800000 = 3 hours)
+const boolean debug = false;    // Enable serial communication after startup
+const char* deviceImei;         // International Mobile Equipment Identity (IMEI)
+const long int standby = 10800000;   // Time for GSM to turn off in milliseconds (10800000 = 3 hours)
 
-String commands[] = {"AT", "AT+CSQ", "AT+CPIN?", "AT+CPIN=4321", "AT+GSN", "AT+CREG?", "AT+CSQ", "AT+CMGF=1", "AT+CMGS=\"+27820486812\"", "THIS IS A TEST MESSAGE|", "|"};
+const String commands[] = {"AT", "AT+CSQ", "AT+CPIN?", "AT+CPIN=4321", "AT+GSN", "AT+CREG?", "AT+CSQ", "AT+CMGF=1", "AT+CMGS=\"+27820486812\"", "THIS IS A TEST MESSAGE|", "|",
+"AT+QIFGCNT=0", "AT+QICSGP=1,\"internet\"", "AT+QHTTPURL=37,50", "http://erbium.requestcatcher.com/test", "AT+QHTTPPOST=11,50,50", "Hello World", "AT+QHTTPREAD=50"};
 
 int startupSet[] = {0, 1, 2, 5, -1};
 int enterPin[] = {3, -1};
+int postRequestSet[] = {11, 12, 13, 14, 15, 16, -1};
 int sendSmsSet[] = {7, 8, 9, -1};
 
 // Returns the length of an int array that terminates with -1
@@ -81,6 +83,7 @@ void gsmOff()
   Serial.println("Entering Stand by mode");
 }
 
+// Talks to GSM modem and returns its response
 char* request(int instruction)
 {
   int count = 0, timeout = 0;
@@ -103,7 +106,7 @@ char* request(int instruction)
   }
   GSM.println();
   delay(100);
-  while (!flag and timeout < 100)
+  while (!flag and timeout < 5)
   {
     while (GSM.available())
     {
@@ -112,6 +115,9 @@ char* request(int instruction)
         break;
       flag = true;
     }
+    delay(2000);
+    if(GSM.available())
+      flag = false;
     ++timeout;
   }
   return buffer;
@@ -137,6 +143,17 @@ int check(char ret[])
         return -1;
       }
     if (ret[a] == 'C')
+      if (ret[a+1] == 'O')
+        if (ret[a+2] == 'N')
+          if (ret[a+3] == 'N')
+            if (ret[a+4] == 'E')
+              if (ret[a+5] == 'C')
+                if (ret[a+6] == 'T')
+                {
+                  Serial.println("SUCCESS");
+                  return -1;
+                }
+    if (ret[a] == 'C')
       if (ret[a + 1] == 'M')
         if (ret[a + 2] == 'E')
           for (int i = a; i < a + 4; ++i)
@@ -145,6 +162,7 @@ int check(char ret[])
               err[i - a] = ret[i + 11];
           }
   }
+  Serial.println("FULL ERROR OUTPUT: " + String(ret));
   return charArrToInt(err);
 }
 
@@ -162,7 +180,7 @@ boolean resolve(int errorCode)
       Serial.println("SIM is not inserted");
       return false;
     case 11:
-      Serial.println("SIM PIN required, trying default pin once (4321)");
+      Serial.println("SIM PIN required, trying default pin once (0000)");
       //execute(enterPin);
       return false;
     case 30:
@@ -216,10 +234,11 @@ void startup()
   execute(startupSet);
   // Advance tests:
   // test signal strength, 0 or 1 is to low
-  if (charArrToInt(select(request(6), 15)) < 2)
+  char* sub = select(request(6), 15);
+  if (charArrToInt(sub) < 2)
     if (!resolve(30))
       Serial.println("Program broke due to the above unresolved error.");
-
+  delete [] sub;
 }
 
 void setup() {
@@ -232,7 +251,9 @@ void setup() {
 
   deviceImei = filterResult(request(4));
   Serial.println("IMEI Number: " + String(deviceImei));
-  Serial.println("Signal Strength: " + String(select(request(6), 15)));
+  char* sub = select(request(6), 15);
+  Serial.println("Signal Strength: " + String(sub));
+  delete [] sub;
 }
 
 void loop() {
@@ -265,10 +286,11 @@ void loop() {
   }
   else
   {
-    execute(sendSmsSet);
-    delay(3000);
-    gsmOff();
-    delay(standby);
+    execute(postRequestSet);
+	Serial.println(request(17));
+    //delay(3000);
+    //gsmOff();
+    //delay(standby);
     gsmOn();
   }
 }
