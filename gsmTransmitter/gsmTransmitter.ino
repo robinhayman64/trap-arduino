@@ -5,7 +5,7 @@ boolean debug = true;    // Enable serial communication after startup
 char* deviceImei;         // International Mobile Equipment Identity (IMEI)
 long int standby = 10800000;   // Time for GSM to turn off in milliseconds (10800000 = 3 hours)
 
-String commands[] = {"AT", "AT+CSQ", "AT+CPIN?", "AT+CPIN=4321", "AT+GSN", "AT+CREG?", "AT+CSQ", "AT+CMGF=1", "AT+CMGS=\"+27746640000\"", "THIS IS A TEST MESSAGE|", "|"};
+String commands[] = {"AT", "AT+CSQ", "AT+CPIN?", "AT+CPIN=4321", "AT+GSN", "AT+CREG?", "AT+CSQ", "AT+CMGF=1", "AT+CMGS=\"+27820486812\"", "THIS IS A TEST MESSAGE|", "|"};
 
 int startupSet[] = {0, 1, 2, 5, -1};
 int enterPin[] = {3, -1};
