@@ -1,8 +1,6 @@
 #include <SoftwareSerial.h>
 SoftwareSerial GSM(2, 3); // RX, TX
 
-const boolean debug = false;    // Enable serial communication after startup
-const char* deviceImei;         // International Mobile Equipment Identity (IMEI)
 const long int standby = 10800000;   // Time for GSM to turn off in milliseconds (10800000 = 3 hours)
 
 const String commands[] = {"AT", "AT+CSQ", "AT+CPIN?", "AT+CPIN=4321", "AT+GSN", "AT+CREG?", "AT+CSQ", "AT+CMGF=1", "AT+CMGS=\"+27820486812\"", "THIS IS A TEST MESSAGE|", "|",
@@ -12,6 +10,35 @@ int startupSet[] = {0, 1, 2, 5, -1};
 int enterPin[] = {3, -1};
 int postRequestSet[] = {11, 12, 13, 14, 15, 16, -1};
 int sendSmsSet[] = {7, 8, 9, -1};
+
+void serialComminication()
+{
+  // Read and Write from Serial after startup
+  unsigned char buffer[64];
+  int count = 0;
+  while (GSM.available())
+  {
+    buffer[count++] = GSM.read();
+    if (count == 64)
+      break;
+  }
+
+  Serial.write(buffer, count);
+  for (int i = 0; i < count; i++)
+  {
+    buffer[i] = '\0';
+  }
+  count = 0;
+
+  if (Serial.available())
+  {
+    byte b = Serial.read();
+    if (b == '|')
+      GSM.write(0x1a);
+    else
+      GSM.write(b);
+  }
+}
 
 // Returns the length of an int array that terminates with -1
 int intArrLength(int arr[])
@@ -240,69 +267,3 @@ void startup()
       Serial.println("Program broke due to the above unresolved error.");
   delete [] sub;
 }
-
-void setup() {
-  GSM.begin(9600);
-  Serial.begin(9600);
-  pinMode(7, OUTPUT);
-
-  startup();
-  Serial.println("Startup done");
-
-  deviceImei = filterResult(request(4));
-  Serial.println("IMEI Number: " + String(deviceImei));
-  char* sub = select(request(6), 15);
-  Serial.println("Signal Strength: " + String(sub));
-  delete [] sub;
-}
-
-void loop() {
-  if (debug) {
-    // Read and Write from Serial after startup
-    unsigned char buffer[64];
-    int count = 0;
-    while (GSM.available())
-    {
-      buffer[count++] = GSM.read();
-      if (count == 64)
-        break;
-    }
-
-    Serial.write(buffer, count);
-    for (int i = 0; i < count; i++)
-    {
-      buffer[i] = '\0';
-    }
-    count = 0;
-
-    if (Serial.available())
-    {
-      byte b = Serial.read();
-      if (b == '|')
-        GSM.write(0x1a);
-      else
-        GSM.write(b);
-    }
-  }
-  else
-  {
-    execute(postRequestSet);
-	Serial.println(request(17));
-    //delay(3000);
-    //gsmOff();
-    //delay(standby);
-    gsmOn();
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
