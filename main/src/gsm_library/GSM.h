@@ -39,7 +39,7 @@ private:
 
 		// Internal Variables
 		String address, message;
-		SoftwareSerial *MODEM;
+		SoftwareSerial *Modem;
 
 public:
 		// Setter Methods
