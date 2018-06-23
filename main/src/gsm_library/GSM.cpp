@@ -30,8 +30,8 @@ void GSM::setMessage(String me)
 GSM::GSM(int tx, int rx)
 {
 	// Create and initialize the modem object
-	MODEM = new SoftwareSerial(tx, rx);
-	MODEM->begin(9600);
+	Modem = new SoftwareSerial(tx, rx);
+	Modem->begin(9600);
 
 	// Pin modes
 	pinMode(7, OUTPUT);
@@ -65,16 +65,16 @@ char *GSM::request(int instruction)
 		switch (commands[instruction][1])
 		{
 			case 'U':
-				MODEM->println(address);
+				Modem->println(address);
 				break;
 			case 'M':
-				MODEM->println(message);
+				Modem->println(message);
 				break;
 			case 'A':
-				MODEM->println(String("AT+QHTTPURL= ") + String(address.length()) + String(",50"));
+				Modem->println(String("AT+QHTTPURL= ") + String(address.length()) + String(",50"));
 				break;
 			case 'B':
-				MODEM->println(String("AT+QHTTPPOST=") + String(message.length()) + String(",50,50"));
+				Modem->println(String("AT+QHTTPPOST=") + String(message.length()) + String(",50,50"));
 				break;
 		}
 	} else
@@ -83,27 +83,27 @@ char *GSM::request(int instruction)
 		{
 			byte b = commands[instruction][i];
 			if (b == '|')
-				MODEM->write(0x1a);
+				Modem->write(0x1a);
 			else
-				MODEM->write(b);
+				Modem->write(b);
 			++i;
 		}
 	}
 
-	MODEM->println();
+	Modem->println();
 	delay(100);
 
 	while (!flag and timeout < 5)
 	{
-		while (MODEM->available())
+		while (Modem->available())
 		{
-			buffer[count++] = MODEM->read();
+			buffer[count++] = Modem->read();
 			if (count == 64)
 				break;
 			flag = true;
 		}
 		delay(2000);
-		if (MODEM->available())
+		if (Modem->available())
 			flag = false;
 		++timeout;
 	}
@@ -172,7 +172,7 @@ bool GSM::resolve(int errorCode)
 	return true;
 }
 
-void GSM::bool isOn()
+bool GSM::isOn()
 {
 	if (check(request(0)) == -1)
 		return true;
@@ -231,8 +231,8 @@ int GSM::check(char ret[])
 				if (ret[a + 2] == 'E')
 					for (int i = a; i < a + 4; ++i)
 					{
-						if (isDigit(ret[i + 11]))
-							err[i - a] = ret[i + 11];
+						if (isDigit(ret[11 + i]))
+							err[i - a] = ret[11 + i];
 					}
 	}
 	return atoi(err);
