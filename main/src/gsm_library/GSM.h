@@ -20,37 +20,41 @@ https://github.com/ebriumgroep/trap-arduino
 class GSM
 {
 private:
-  // Constant Data
-  const String commands[18] = { "AT", "AT+CSQ", "AT+CPIN?", "AT+CPIN=4321", "AT+GSN", "AT+CREG?", "AT+CSQ", "AT+CMGF=1", "AT+CMGS=\"+27820486812\"", "THIS IS A TEST MESSAGE|", "|",
-                                "AT+QIFGCNT=0", "AT+QICSGP=1,\"internet\"", "@A", "@U", "@B", "@M", "AT+QHTTPREAD=50"};
-  const int startupSet[5] = {0, 1, 2, 5, -1};           	      // The commands to execute in sequence to start the gsm modem
-  const int postRequestSet[7] = {11, 12, 13, 14, 15, 16, -1}; 	// The commands to execute on sequence to do a post request to an server
+		// Constant Data
+		const String commands[18] = {"AT", "AT+CSQ", "AT+CPIN?", "AT+CPIN=4321", "AT+GSN", "AT+CREG?", "AT+CSQ",
+																 "AT+CMGF=1", "AT+CMGS=\"+27820486812\"", "THIS IS A TEST MESSAGE|", "|",
+																 "AT+QIFGCNT=0", "AT+QICSGP=1,\"internet\"", "@A", "@U", "@B", "@M", "AT+QHTTPREAD=50"};
+		const int startupSet[5] = {0, 1, 2, 5,
+															 -1};                  // The commands to execute in sequence to start the gsm modem
+		const int postRequestSet[7] = {11, 12, 13, 14, 15, 16,
+																	 -1};    // The commands to execute on sequence to do a post request to an server
 
-  // Internal Methods
-  char* request(int);       // Execute an single command drom the commands array
-  bool execute(int []);     // Execute a list of functions with the request method
-  bool resolve(int);        // Resolves error codes
-  int arrLength(int []);    // Derermine the length of an array
-  int check(char []);       // Checks for error codes in the output
-  void gsmOn();             // Turns the GSM Modem on
-  void gsmOf();             // Turns the GSM Modem of
+		// Internal Methods
+		char *request(int);       // Execute an single command from the commands array
+		bool execute(int []);     // Execute a list of functions with the request method
+		bool resolve(int);        // Resolves error codes
+		int arrLength(int []);    // Determine the length of an array
+		int check(char []);       // Checks for error codes in the output
+		void gsmOn();             // Turns the GSM modem on
+		void gsmOf();             // Turns the GSM modem of
 
-  // Internal Variables
-  String adress, mesage;    // Done
-  SoftwareSerial *MODEM;    // Done
+		// Internal Variables
+		String address, message;
+		SoftwareSerial *MODEM;
 
 public:
-  // Setter Methods
-  void setAdress(String);   // Done
-  void setMesage(String);   // Done
+		// Setter Methods
+		void setAddress(String);   // Done
+		void setMessage(String);   // Done
 
-  // Controll Methods
-  bool start();
-  bool postr();
+		// Control Methods
+		bool start();
 
-  // Constructor and Destructor
-  GSM(int, int);            // Done
-  ~GSM();                   // Done
+		bool postRequest();
+
+		// Constructor and Destructor
+		GSM(int, int);            // Done
+		~GSM();                   // Done
 };
 
 #endif
