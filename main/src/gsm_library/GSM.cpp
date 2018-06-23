@@ -26,7 +26,7 @@ void GSM::setMessage(String me)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////
-// Constructor and Destructor
+// Constructor
 GSM::GSM(int tx, int rx)
 {
 	// Create and initialize the modem object
@@ -40,9 +40,10 @@ GSM::GSM(int tx, int rx)
 	Serial.begin(9600);
 }
 
+//Destructor
 GSM::~GSM()
 {
-	//Destructor
+	gsmOff();
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -171,20 +172,34 @@ bool GSM::resolve(int errorCode)
 	return true;
 }
 
-void GSM::gsmOn()
+void GSM::bool isOn()
 {
-	digitalWrite(7, HIGH);
-	delay(1000); // 800 also works, but 1000 is safe
-	digitalWrite(7, LOW);
-	delay(10000); // 9 seconds also works, but 10 is safe
+	if (check(request(0)) == -1)
+		return true;
+	else
+		return false;
 }
 
-void GSM::gsmOf()
+void GSM::gsmOn()
 {
-	digitalWrite(7, HIGH);
-	delay(1000); // 800 also works, but 1000 is safe
-	digitalWrite(7, LOW);
-	delay(2000); // wait until shutdown is done
+	if (!isOn())
+	{
+		digitalWrite(7, HIGH);
+		delay(1000); // 800 also works, but 1000 is safe
+		digitalWrite(7, LOW);
+		delay(10000); // 9 seconds also works, but 10 is safe
+	}
+}
+
+void GSM::gsmOff()
+{
+	if (isOn())
+	{
+		digitalWrite(7, HIGH);
+		delay(1000); // 800 also works, but 1000 is safe
+		digitalWrite(7, LOW);
+		delay(2000); // wait until shutdown is done
+	}
 }
 
 int GSM::check(char ret[])

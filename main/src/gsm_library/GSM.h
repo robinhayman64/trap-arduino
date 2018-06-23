@@ -28,13 +28,14 @@ private:
 		int postRequestSet[7] = {11, 12, 13, 14, 15, 16, -1};  // The commands to execute on sequence to do a post request to an server
 
 		// Internal Methods
-		char *request(int);       // Execute an single command from the commands array
-		bool execute(int []);     // Execute a list of functions with the request method
-		bool resolve(int);        // Resolves error codes
-		int arrLength(int []);    // Determine the length of an array
-		int check(char []);       // Checks for error codes in the output
-		void gsmOn();             // Turns the GSM modem on
-		void gsmOf();             // Turns the GSM modem of
+		char *request(int);			// Execute an single command from the commands array
+		bool execute(int []);		// Execute a list of functions with the request method
+		bool resolve(int);			// Resolves error codes
+		int arrLength(int []);		// Determine the length of an array
+		int check(char []);			// Checks for error codes in the output
+		bool isOn();				// Checks if the GSM modem is on
+		void gsmOn();				// Turns the GSM modem on
+		void gsmOff();				// Turns the GSM modem of
 
 		// Internal Variables
 		String address, message;
@@ -42,17 +43,16 @@ private:
 
 public:
 		// Setter Methods
-		void setAddress(String);   // Done
-		void setMessage(String);   // Done
+		void setAddress(String);	// Done
+		void setMessage(String);	// Done
 
 		// Control Methods
 		bool start();
-
 		bool postRequest();
 
 		// Constructor and Destructor
-		GSM(int, int);            // Done
-		~GSM();                   // Done
+		GSM(int, int);				// Done
+		~GSM();						// Done
 };
 
 #endif
