@@ -22,12 +22,10 @@ class GSM
 private:
 		// Constant Data
 		const String commands[18] = {"AT", "AT+CSQ", "AT+CPIN?", "AT+CPIN=4321", "AT+GSN", "AT+CREG?", "AT+CSQ",
-																 "AT+CMGF=1", "AT+CMGS=\"+27820486812\"", "THIS IS A TEST MESSAGE|", "|",
-																 "AT+QIFGCNT=0", "AT+QICSGP=1,\"internet\"", "@A", "@U", "@B", "@M", "AT+QHTTPREAD=50"};
-		const int startupSet[5] = {0, 1, 2, 5,
-															 -1};                  // The commands to execute in sequence to start the gsm modem
-		const int postRequestSet[7] = {11, 12, 13, 14, 15, 16,
-																	 -1};    // The commands to execute on sequence to do a post request to an server
+									 "AT+CMGF=1", "AT+CMGS=\"+27820486812\"", "THIS IS A TEST MESSAGE|", "|",
+									 "AT+QIFGCNT=0", "AT+QICSGP=1,\"internet\"", "@A", "@U", "@B", "@M", "AT+QHTTPREAD=50"};
+		int startupSet[5] = {0, 1, 2, 5, -1};                  // The commands to execute in sequence to start the GSM modem
+		int postRequestSet[7] = {11, 12, 13, 14, 15, 16, -1};  // The commands to execute on sequence to do a post request to an server
 
 		// Internal Methods
 		char *request(int);       // Execute an single command from the commands array

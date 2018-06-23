@@ -29,7 +29,7 @@ void GSM::setMessage(String me)
 // Constructor and Destructor
 GSM::GSM(int tx, int rx)
 {
-	// Create and initialise the modem object
+	// Create and initialize the modem object
 	MODEM = new SoftwareSerial(tx, rx);
 	MODEM->begin(9600);
 
@@ -64,16 +64,16 @@ char *GSM::request(int instruction)
 		switch (commands[instruction][1])
 		{
 			case 'U':
-				MODEM->println(adress);
+				MODEM->println(address);
 				break;
 			case 'M':
-				MODEM->println(mesage);
+				MODEM->println(message);
 				break;
 			case 'A':
-				MODEM->println(String("AT+QHTTPURL= ") + String(adress.length()) + String(",50"));
+				MODEM->println(String("AT+QHTTPURL= ") + String(address.length()) + String(",50"));
 				break;
 			case 'B':
-				MODEM->println(String("AT+QHTTPPOST=") + String(mesage.length()) + String(",50,50"));
+				MODEM->println(String("AT+QHTTPPOST=") + String(message.length()) + String(",50,50"));
 				break;
 		}
 	} else

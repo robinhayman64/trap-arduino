@@ -17,8 +17,8 @@ void setup()
 	if (gsm.start())
 	{
 		// Initialise the test post address and message. This may be changed throughout the run of the program in the void loop function.
-		gsm.setAdress("http://erbium.requestcatcher.com/test");
-		gsm.setMesage("Aangeskakel");
+		gsm.setAddress("http://erbium.requestcatcher.com/test");
+		gsm.setMessage("Aangeskakel");
 		if (gsm.postRequest())
 		{
 			Serial.println("Startup Successful");
@@ -33,7 +33,7 @@ void loop()
 
 	// Read the temperature and assign it to the gsm modem
 	float t = dht.readTemperature();
-	gsm.setMesage(String("Die Temperatuur is: ") + String(t));
+	gsm.setMessage(String("Die Temperatuur is: ") + String(t));
 
 	// Use the gsm modem to post the temperature to the server
 	if (gsm.postRequest())
