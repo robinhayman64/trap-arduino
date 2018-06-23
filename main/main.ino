@@ -11,6 +11,9 @@ void setup()
   if(gsm.start())
   {
     Serial.println("Startup Sucsessfull");
+    // Initialise the test post adress and message. This may be changed throughout the run of the program in the void loop function.
+    gsm.setAdress("http://erbium.requestcatcher.com/test")
+    gsm.setMesage("sonbesie")
   }
 }
 
