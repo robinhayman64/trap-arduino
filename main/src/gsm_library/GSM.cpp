@@ -56,17 +56,41 @@ char* GSM::request(int instruction)
     {
         buffer[a] = '\0';
     }
-    while (commands[instruction][i] != '\0')
+
+    if(commands[instruction][0] == '@')
     {
-        byte b = commands[instruction][i];
-        if (b == '|')
-            MODEM->write(0x1a);
-        else
-            MODEM->write(b);
-        ++i;
+        switch(commands[instruction][1])
+        {
+            case 'U':
+                MODEM->println(adress);
+                break;
+            case 'M':
+                MODEM->println(mesage);
+                break;
+            case 'A':
+                MODEM->println(String("AT+QHTTPURL= ")+String(adress.length())+String(",50"   ));
+                break;
+            case 'B':
+                MODEM->println(String("AT+QHTTPPOST=")+String(mesage.length())+String(",50,50"));
+                break;
+        }
     }
+    else
+    {
+        while (commands[instruction][i] != '\0')
+        {
+            byte b = commands[instruction][i];
+            if (b == '|')
+                MODEM->write(0x1a);
+            else
+                MODEM->write(b);
+            ++i;
+        }
+    }
+
     MODEM->println();
     delay(100);
+
     while (!flag and timeout < 5)
     {
         while (MODEM->available())
