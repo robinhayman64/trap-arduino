@@ -36,6 +36,7 @@ private:
 		bool isOn();				// Checks if the GSM modem is on
 		void gsmOn();				// Turns the GSM modem on
 		void gsmOff();				// Turns the GSM modem of
+		int hash(String);			// Hashes a String using a ASCII addition and Mid-Square method
 
 		// Internal Variables
 		String address, message;

@@ -238,6 +238,21 @@ int GSM::check(char ret[])
 	return atoi(err);
 }
 
+int hash(String text)
+{
+	long int sum = 0, key;
+	int length = 0;
+	for (int i = 0; i < text.length(); ++i) // adds the ASCII value for each letter to sum
+		sum += int(text[i]); // gets ASCII value of letter
+	while (key < 100) // ensures key is at least 3 characters long
+		key = sum = sum * sum; // squares the sum
+	for(; sum != 0; sum /= 10, ++length); // gets the length of the squared sum
+	char *sKey = new char[3];
+	for (int i = 0; i < 3; ++i)
+		sKey[i] = String(key)[((length/2) - 1) + i]; // gets the middle three characters
+	return atoi(sKey); // returns an int between 100 and 999
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////
 //Control Methods

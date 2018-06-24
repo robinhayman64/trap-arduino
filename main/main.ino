@@ -2,7 +2,6 @@
 #include "src/dht_library/DHT.h"
 #include "src/gsm_library/GSM.h"
 
-//GSM gsm(2, 3);
 GSM *gsm;
 DHT dht(4, 22);
 
