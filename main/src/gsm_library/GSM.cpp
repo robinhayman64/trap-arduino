@@ -240,6 +240,8 @@ int GSM::check(char ret[])
 
 int hash(String text)
 {
+	if (int(text[0]) < 2) // infinite loop on an Arduino would take even longer
+	    return 0;
 	long int sum = 0, key = 0;
 	int length = 0;
 	for (int i = 0; i < text.length(); ++i) // adds the ASCII value for each letter to sum
