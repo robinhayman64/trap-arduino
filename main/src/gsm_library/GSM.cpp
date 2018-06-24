@@ -240,7 +240,7 @@ int GSM::check(char ret[])
 
 int hash(String text)
 {
-	long int sum = 0, key;
+	long int sum = 0, key = 0;
 	int length = 0;
 	for (int i = 0; i < text.length(); ++i) // adds the ASCII value for each letter to sum
 		sum += int(text[i]); // gets ASCII value of letter
