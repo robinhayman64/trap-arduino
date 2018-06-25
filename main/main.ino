@@ -48,3 +48,4 @@ void loop()
 		Serial.println("Temperature Posted Successfully");
 	}
 }
+//Toets 1 2 3
