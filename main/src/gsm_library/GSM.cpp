@@ -238,7 +238,7 @@ int GSM::check(char ret[])
 	return atoi(err);
 }
 
-int hash(String text)
+int GSM::hash(String text)
 {
 	if (int(text[0]) < 2) // infinite loop on an Arduino would take even longer
 	    return 0;
